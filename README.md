@@ -1,0 +1,2 @@
+# awesomewm
+Awesomewm file config
