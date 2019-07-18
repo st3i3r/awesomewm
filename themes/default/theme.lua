@@ -29,7 +29,7 @@ theme.border_width  = dpi(0)
 --theme.border_normal = "#3d86ff"
 theme.border_normal = "#AACFD1"
 theme.border_focus  = "#000000"
-theme.border_marked = "#00ff00"
+--theme.border_marked = "#00ff00"
 theme.prompt_fg  	= "#ffffff"
 
 -- There are other variable sets

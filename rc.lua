@@ -303,9 +303,9 @@ end
 local function lowbat_notification()
 	
 	local f1_capacity = assert(io.open("/sys/class/power_supply/BAT1/capacity", "r"))
-	--local f1_status = assert(io.open("/sys/class/power_supply/BAT1/status", "r"))
+	local f1_status = assert(io.open("/sys/class/power_supply/BAT1/status", "r"))
 	local bat1_capacity = tonumber(f1_capacity:read("*all"))
-	--local bat1_status = trim(f1_status:read("*all"))
+	local bat1_status = trim(f1_status:read("*all"))
 
 
 	local f0_capacity = assert(io.open("/sys/class/power_supply/BAT0/capacity", "r"))
@@ -325,7 +325,7 @@ local function lowbat_notification()
 	})
 	end
 
-	if (bat1_capacity == 11 or bat1_capacity == 51 or bat1_capacity == 31)  then
+	if (bat1_capacity == 11 or bat1_capacity == 51 or bat1_capacity == 31) and bat1_status ~= "Discharging" then
 		naughty.notify({ title      = "Battery Warning"
 		, text       = "External Battery Status " .. bat1_capacity .."%" .. " left!"
 		, fg="#00ff00"
@@ -519,7 +519,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen hasits own tag table.
-    awful.tag({ "0", "1", "2", "3"}, s, awful.layout.layouts[2])
+    awful.tag({ "1", "2", "3", "4", "5"}, s, awful.layout.layouts[2])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -604,7 +604,7 @@ globalkeys = gears.table.join(
 
     -- X screen locker
     awful.key({"Mod1", "Control"}, "l", function () 
-    	awful.util.spawn("slock", false) end,
+    	awful.util.spawn("/home/elliot/.config/awesome/lock.sh", false) end,
               {description = "lock screen", group = "hotkeys"}),
 
 
@@ -744,11 +744,11 @@ globalkeys = gears.table.join(
     -- Brightness
     awful.key({ }, "XF86MonBrightnessUp", 
 	function () 
-			awful.spawn("xbacklight -inc 5") 
+			awful.spawn("xbacklight -inc 1") 
 			local b_capacity = assert(io.open("/sys/class/backlight/intel_backlight/brightness", "r"))
   			local brightness_level = tonumber(b_capacity:read("*all"))
     		naughty.notify({ title      = "Brightness"
-      		, text       =  "Brightness level: " .. (brightness_level/15.2) .. "%"
+      		, text       =  "Brightness level: " .. math.ceil(brightness_level/15.2) .. "%"
       		, fg="#00ff00"
       		, bg="#000000"
       		, timeout    = 2 
@@ -757,11 +757,11 @@ globalkeys = gears.table.join(
 
     awful.key({ }, "XF86MonBrightnessDown", 
 	function () 
-			awful.spawn("xbacklight -dec 5") 
+			awful.spawn("xbacklight -dec 1") 
 			local b_capacity = assert(io.open("/sys/class/backlight/intel_backlight/brightness", "r"))
   			local brightness_level = tonumber(b_capacity:read("*all"))
     		naughty.notify({ title      = "Brightness", 
-			text       =  "Brightness level: " .. (brightness_level/15.2) .. "%",
+			text       =  "Brightness level: " .. math.ceil(brightness_level/15.2) .. "%",
       		fg="#00ff00",
       		bg="#000000",
       		timeout    = 2
@@ -1026,5 +1026,3 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 awful.spawn.with_shell("~/.config/awesome/autorun.sh")
-
-

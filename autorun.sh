@@ -10,4 +10,5 @@ function run {
 run mpd
 run setxkbmap -layout "us,ru" -option "grp:alt_shift_toggle"
 run udiskie -0 -a -n
-notify-send "Hello Friend"
+#run nm-applet
+#run xautolock -detectsleep -time 10 -locker "/home/elliot/.config/awesome/i3lock.sh" 
