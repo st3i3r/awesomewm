@@ -633,7 +633,7 @@ globalkeys = gears.table.join(
             if client.focus then client.focus:raise() end
         end,
         {description = "focus right", group = "client"}),
-    awful.key({ modkey,           }, "w", function () awful.util.mymainmenu:show() end,
+    awful.key({ modkey           }, "w", function () mymainmenu:show() end,
 {description = "show main menu", group = "awesome"}),
 
 

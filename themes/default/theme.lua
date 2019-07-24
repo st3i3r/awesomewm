@@ -14,13 +14,13 @@ local theme = {}
 theme.font          = "xos4 Terminus 11"
 
 theme.bg_normal     = "#00000088"
-theme.bg_focus      = "#0000ff"
+theme.bg_focus      = "#00dd00"
 theme.bg_urgent     = "#ff0000"
 theme.bg_minimize   = "#0000A444"
 theme.bg_systray    = "#ffffff"
 
 theme.fg_normal     = "#dddddd"
-theme.fg_focus      = "#dddddd"
+theme.fg_focus      = "#000000"
 theme.fg_urgent     = "#dddddd"
 theme.fg_minimize   = "#aaaaaa"
 
@@ -43,7 +43,7 @@ theme.prompt_fg  	= "#ffffff"
 -- prompt_[fg|bg|fg_cursor|bg_cursor|font]
 -- hotkeys_[bg|fg|border_width|border_color|shape|opacity|modifiers_fg|label_bg|label_fg|group_margin|font|description_font]
 -- Example:
-theme.taglist_bg_focus = "#0000A4"
+theme.taglist_bg_focus = "#00dd00"
 
 -- Generate taglist squares:
 local taglist_square_size = dpi(4)
@@ -66,7 +66,7 @@ theme.notification_fg				= "#00ff00"
 -- Variables set for theming the menu:
 -- menu_[bg|fg]_[normal|focus]
 -- menu_[border_color|border_width]
-theme.menu_fg_focus = "#ffffff"
+theme.menu_fg_focus = "#000000"
 theme.menu_submenu_icon = "~/.config/awesome/themes/default/arrow.png"
 theme.menu_height = dpi(20)
 theme.menu_width  = dpi(150)

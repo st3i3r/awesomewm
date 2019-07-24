@@ -6,7 +6,7 @@ function run {
     $@&
   fi
 }
-
+run compton -CGb
 run mpd
 run setxkbmap -layout "us,ru" -option "grp:alt_shift_toggle"
 run udiskie -0 -a -n
