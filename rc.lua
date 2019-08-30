@@ -20,7 +20,7 @@ local os = os
 
 
 local theme                                     = {}
-theme.font				= "xos4 Terminus 11"
+theme.font				= "Terminus (TTF) Medium 12"
 local gfs = require("gears.filesystem")
 local themes_path = gfs.get_themes_dir()
 local markup = lain.util.markup
@@ -266,7 +266,6 @@ theme.cal = lain.widget.cal({
     attach_to = { mytextclock },
     followtag = true,
     notification_preset = {
-        font = "xos4 Terminus",
         fg   = "#00ff00",
         bg   = "#000000"
     }
@@ -325,7 +324,7 @@ local function lowbat_notification()
 	})
 	end
 
-	if (bat1_capacity == 11 or bat1_capacity == 51 or bat1_capacity == 31) and bat1_status ~= "Discharging" then
+	if ((bat1_capacity == 11 or bat1_capacity == 51 or bat1_capacity == 31) and bat1_status ~= "Discharging") then
 		naughty.notify({ title      = "Battery Warning"
 		, text       = "External Battery Status " .. bat1_capacity .."%" .. " left!"
 		, fg="#00ff00"
@@ -385,7 +384,7 @@ local function update_widget()
 		, text       = text
 		, fg="#00ff00"
 		, bg="#000000"
-		, font = "xos4 Terminus 12"
+		, font = "Terminus (TTF) Medium 12"
 		, margin = 5
 		, timeout    = 3
 		})

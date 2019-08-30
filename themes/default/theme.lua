@@ -11,7 +11,7 @@ local themes_path = gfs.get_themes_dir()
 
 local theme = {}
 
-theme.font          = "xos4 Terminus 11"
+theme.font          = "Terminus (TTF) Medium 12"
 
 theme.bg_normal     = "#00000088"
 theme.bg_focus      = "#00dd00"
