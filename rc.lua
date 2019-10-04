@@ -266,7 +266,7 @@ theme.cal = lain.widget.cal({
     attach_to = { mytextclock },
     followtag = true,
     notification_preset = {
-        fg   = "#00ff00",
+        fg   = "#dddddd",
         bg   = "#000000"
     }
 })
@@ -316,7 +316,7 @@ local function lowbat_notification()
 		naughty.notify({ title      = "Battery Warning"
 		, text       = "Battery low! " .. bat0_capacity .."%" .. " left!"
 		, fg="#ff0000"
-		, bg="#000000"
+		, bg="#333333"
 		, border_color = "#ff0000"
 		, margin = 5 
 		, timeout    = 15
@@ -324,10 +324,10 @@ local function lowbat_notification()
 	})
 	end
 
-	if ((bat1_capacity == 11 or bat1_capacity == 51 or bat1_capacity == 31) and bat1_status ~= "Discharging") then
+	if ((bat1_capacity == 11 or bat1_capacity == 51 or bat1_capacity == 31) and (bat1_status ~= "Charging" and bat0_status ~= "Charging")) then
 		naughty.notify({ title      = "Battery Warning"
-		, text       = "External Battery Status " .. bat1_capacity .."%" .. " left!"
-		, fg="#00ff00"
+		, text       = "External Battery " .. bat1_capacity .."%" .. " left!"
+		--, fg="#00ff00"
 		, bg="#000000"
 		, margin = 3
 		, timeout    = 120
@@ -356,7 +356,7 @@ local function bat_notification()
 
 	naughty.notify({ title      = "Battery Status"
 	, text       = "External Battery: " .. bat1_capacity .."% - " .. bat1_status .. "\n" .. "Internal Battery: " .. bat0_capacity .. "% - " .. bat0_status 
-	, fg="#00ff00"
+	--, fg="#00ff00"
 	, bg="#000000"
 	, margin = 3
 	, timeout    = 5
@@ -382,8 +382,9 @@ local function update_widget()
 	if state == "play" then
 		naughty.notify({ title      = "Now playing"
 		, text       = text
-		, fg="#00ff00"
+		, fg="#ffff00"
 		, bg="#000000"
+		, border_color="#ffff00"
 		, font = "Terminus (TTF) Medium 12"
 		, margin = 5
 		, timeout    = 3
@@ -748,7 +749,7 @@ globalkeys = gears.table.join(
   			local brightness_level = tonumber(b_capacity:read("*all"))
     		naughty.notify({ title      = "Brightness"
       		, text       =  "Brightness level: " .. math.ceil(brightness_level/15.2) .. "%"
-      		, fg="#00ff00"
+      		--, fg="#00ff00"
       		, bg="#000000"
       		, timeout    = 2 
     		})
@@ -761,7 +762,7 @@ globalkeys = gears.table.join(
   			local brightness_level = tonumber(b_capacity:read("*all"))
     		naughty.notify({ title      = "Brightness", 
 			text       =  "Brightness level: " .. math.ceil(brightness_level/15.2) .. "%",
-      		fg="#00ff00",
+      		--fg="#00ff00",
       		bg="#000000",
       		timeout    = 2
     		})
