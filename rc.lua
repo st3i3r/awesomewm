@@ -316,7 +316,7 @@ local function lowbat_notification()
 		naughty.notify({ title      = "Battery Warning"
 		, text       = "Battery low! " .. bat0_capacity .."%" .. " left!"
 		, fg="#ff0000"
-		, bg="#333333"
+		, bg="#111111"
 		, border_color = "#ff0000"
 		, margin = 5 
 		, timeout    = 15
@@ -519,8 +519,8 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen hasits own tag table.
-    awful.tag({ "1", "2", "3", "4", "5"}, s, awful.layout.layouts[2])
-
+    awful.tag({ " ✡ ", " ♬ ", " ⌗ " , " ₪ "}, s, awful.layout.layouts[2])
+	
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
     -- Create an imagebox widget which will contain an icon indicating which layout we're using.
@@ -538,7 +538,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 20 })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = 23 })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -813,8 +813,14 @@ clientkeys = gears.table.join(
             c.maximized_horizontal = not c.maximized_horizontal
             c:raise()
         end ,
-        {description = "(un)maximize horizontally", group = "client"})
+        {description = "(un)maximize horizontally", group = "client"}),
          
+   -- working toggle titlebar
+   awful.key({ modkey, "Control" }, "t", 
+   		function (c) 
+		   awful.titlebar.toggle(c)         
+   		end, 
+        {description = "Show/Hide Titlebars", group="client"})
 
 )
 
@@ -907,11 +913,14 @@ awful.rules.rules = {
           "Firefox",
           "Dialog",  -- Firefox addon DownThemAll.
           "copyq", -- Includes session name in class.
+		  "qt-app",
+		  "test",
 	},
         class = {
           "Arandr",
-	  	"Firefox",
+	  	   "Firefox",
           "Gpick",
+		  "qt-app",
           "Kruler",
           "MessageWin",  -- kalarm.
           "Sxiv",
@@ -940,8 +949,16 @@ awful.rules.rules = {
     --{ rule = { class = "Firefox" },
     --   properties = { maximized = true } },
     { rule = { class = "Spotify" },
+       properties = { maximized = true, tag = " ♬ " } },
+    { rule = { class = "Vmware" },
        properties = { maximized = true } },
-    { rule = { class = "VirtualBox" },
+	{ rule = { class = "qt-app"},
+		properties = {titlebars_enabled = true}	},
+	{ rule = { class = "test"},
+		properties = {titlebars_enabled = true}	},
+    { rule = { class = "remmina" },
+       properties = { maximized = true } },
+    { rule = { class = "burp-StartBurp" },
        properties = { maximized = true } },
 }
 -- }}}
