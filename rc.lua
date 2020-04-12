@@ -20,7 +20,7 @@ local os = os
 
 
 local theme                                     = {}
-theme.font				= "Terminus (TTF) Medium 12"
+theme.font				= "Terminus Medium 14"
 local gfs = require("gears.filesystem")
 local themes_path = gfs.get_themes_dir()
 local markup = lain.util.markup
@@ -55,7 +55,7 @@ end
 beautiful.init("~/.config/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "mate-terminal"
+terminal = "urxvt"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -241,17 +241,17 @@ end
 
 
 
-theme.widget_temp                               = "/home/elliot/.config/awesome/themes/default/icons/temp.png"
-theme.widget_uptime                             = "/home/elliot/.config/awesome/themes/default/icons/ac.png"
-theme.widget_cpu                                = "/home/elliot/.config/awesome/themes/default/icons/cpu.png"
-theme.widget_weather                            = "/home/elliot/.config/awesome/themes/default/icons/dish.png"
-theme.widget_mem                                = "/home/elliot/.config/awesome/themes/default/icons/mem.png"
-theme.widget_netdown                            = "/home/elliot/.config/awesome/themes/default/icons/net_down.png"
-theme.widget_netup                              = "/home/elliot/.config/awesome/themes/default/icons/net_up.png"
-theme.widget_batt                               = "/home/elliot/.config/awesome/themes/default/icons/bat.png"
-theme.widget_clock                              = "/home/elliot/.config/awesome/themes/default/icons/clock.png"
-theme.widget_vol                                = "/home/elliot/.config/awesome/themes/default/icons/spkr.png"
-theme.widget_music                              = "/home/elliot/.config/awesome/themes/default/icons/note.png"
+theme.widget_temp                               = "/home/viet/.config/awesome/themes/default/icons/temp.png"
+theme.widget_uptime                             = "/home/viet/.config/awesome/themes/default/icons/ac.png"
+theme.widget_cpu                                = "/home/viet/.config/awesome/themes/default/icons/cpu.png"
+theme.widget_weather                            = "/home/viet/.config/awesome/themes/default/icons/dish.png"
+theme.widget_mem                                = "/home/viet/.config/awesome/themes/default/icons/mem.png"
+theme.widget_netdown                            = "/home/viet/.config/awesome/themes/default/icons/net_down.png"
+theme.widget_netup                              = "/home/viet/.config/awesome/themes/default/icons/net_up.png"
+theme.widget_batt                               = "/home/viet/.config/awesome/themes/default/icons/bat.png"
+theme.widget_clock                              = "/home/viet/.config/awesome/themes/default/icons/clock.png"
+theme.widget_vol                                = "/home/viet/.config/awesome/themes/default/icons/spkr.png"
+theme.widget_music                              = "/home/viet/.config/awesome/themes/default/icons/note.png"
 
 
 
@@ -283,10 +283,10 @@ end
 --BAT
 local baticon = wibox.widget.imagebox(theme.widget_batt)
 batwidget = wibox.widget.textbox()
-vicious.register(batwidget, vicious.widgets.bat, '$1$2% ', 30, "BAT0")
+vicious.register(batwidget, vicious.widgets.bat, '$1$2% ', 120, "BAT0")
 
 batwidget2 = wibox.widget.textbox()
-vicious.register(batwidget2, vicious.widgets.bat, '$1$2%', 30, "BAT1")
+vicious.register(batwidget2, vicious.widgets.bat, '$1$2%', 120, "BAT1")
 
 
 
@@ -312,7 +312,7 @@ local function lowbat_notification()
 	local bat0_capacity = tonumber(f0_capacity:read("*all"))
 	local bat0_status = trim(f0_status:read("*all"))
 	
-	if (bat0_capacity <= 11 and bat0_status == "Discharging") then
+	if (bat0_capacity <= 10 and bat0_status == "Discharging") then
 		naughty.notify({ title      = "Battery Warning"
 		, text       = "Battery low! " .. bat0_capacity .."%" .. " left!"
 		, fg="#ff0000"
@@ -324,7 +324,7 @@ local function lowbat_notification()
 	})
 	end
 
-	if ((bat1_capacity == 11 or bat1_capacity == 51 or bat1_capacity == 31) and (bat1_status ~= "Charging" and bat0_status ~= "Charging")) then
+	if ((bat1_capacity == 10 or bat1_capacity == 50 or bat1_capacity == 30) and (bat1_status ~= "Charging" and bat0_status ~= "Charging")) then
 		naughty.notify({ title      = "Battery Warning"
 		, text       = "External Battery " .. bat1_capacity .."%" .. " left!"
 		--, fg="#00ff00"
@@ -385,7 +385,7 @@ local function update_widget()
 		, fg="#ffff00"
 		, bg="#000000"
 		, border_color="#ffff00"
-		, font = "Terminus (TTF) Medium 12"
+		, font = "Terminus Medium 14"
 		, margin = 5
 		, timeout    = 3
 		})
@@ -449,7 +449,7 @@ vicious.register(cpuwidget, vicious.widgets.cpu, '<span color="#c92100">$1% </sp
 local weathericon = wibox.widget.imagebox(theme.widget_weather)
 theme.weather = lain.widget.weather({
 city_id = 524901, -- placeholder (London)
-notification_preset = { font = "Terminus 11", fg = theme.fg_normal },
+notification_preset = { font = "Terminus Medium", fg = theme.fg_normal },
 weather_na_markup = markup.fontfg(theme.font, "#eca4c4", "N/A "),
     settings = function()
         descr = weather_now["weather"][1]["description"]:lower()
@@ -604,7 +604,7 @@ globalkeys = gears.table.join(
 
     -- X screen locker
     awful.key({"Mod1", "Control"}, "l", function () 
-    	awful.util.spawn("/home/elliot/.config/awesome/lock.sh", false) end,
+    	awful.util.spawn("/home/viet/.config/awesome/lock.sh", false) end,
               {description = "lock screen", group = "hotkeys"}),
 
 
@@ -636,8 +636,7 @@ globalkeys = gears.table.join(
     awful.key({ modkey           }, "w", function () mymainmenu:show() end,
 {description = "show main menu", group = "awesome"}),
 
-
-
+   
 
 
     -- Volume Keys
@@ -650,6 +649,8 @@ globalkeys = gears.table.join(
    awful.key({}, "XF86AudioMute", function ()
      awful.util.spawn("amixer  set Master toggle", false)
    end),
+
+
    -- Media Keys
    awful.key({}, "XF86AudioStop", function()
      awful.spawn.with_shell("mpc stop && playerctl stop ", false)
@@ -662,6 +663,14 @@ globalkeys = gears.table.join(
    end),
    awful.key({}, "XF86AudioPrev", function()
      awful.spawn.with_shell("playerctl previous || mpc prev", false)
+   end),
+
+	-- Meida Keys for ThinkPad
+	   awful.key({"Control"}, "<", function()
+     awful.spawn.with_shell("mpc toggle || playerctl play-pause", false)
+   end),
+	   awful.key({"Control", "Shift"}, "<", function()
+     awful.spawn.with_shell("mpc prev || playerctl prev", false)
    end),
 
     -- Layout manipulation
@@ -738,9 +747,13 @@ globalkeys = gears.table.join(
                   }
               end,
               {description = "lua execute prompt", group = "awesome"}),
+
+
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"}),
+
+
     -- Brightness
     awful.key({ }, "XF86MonBrightnessUp", 
 	function () 
@@ -927,13 +940,13 @@ awful.rules.rules = {
           "Wpa_gui",
           "pinentry",
           "veromix",
-	        "xtightvncviewer"},
+	  "xtightvncviewer"},
 
         name = {
           "Event Tester",  -- xev.
         },
         role = {
-          "AlarmWindow",  -- Thunderbird's calendar.
+    	  "AlarmWindow",  -- Thunderbird's calendar.
           "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
         }
       }, properties = { floating = true }},

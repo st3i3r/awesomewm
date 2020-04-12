@@ -11,7 +11,7 @@ local themes_path = gfs.get_themes_dir()
 
 local theme = {}
 
-theme.font          = "Terminus (TTF) Medium 12"
+theme.font          = "Terminus Medium 14"
 
 theme.bg_normal     = "#000000aa"
 theme.bg_focus      = "#20ab1d"
@@ -105,19 +105,19 @@ theme.titlebar_maximized_button_normal_active = themes_path .. "default/titlebar
 theme.titlebar_maximized_button_focus_active  = themes_path .. "default/titlebar/maximized_focus_active.png"
 
 
-theme.widget_temp                               = "/home/elliot/.config/awesome/themes/default/icons/temp.png"
-theme.widget_uptime                             = "/home/elliot/.config/awesome/themes/default/icons/ac.png"
-theme.widget_cpu                                = "/home/elliot/.config/awesome/themes/default/icons/cpu.png"
-theme.widget_weather                            = "/home/elliot/.config/awesome/themes/default/icons/dish.png"
-theme.widget_mem                                = "/home/elliot/.config/awesome/themes/default/icons/mem.png"
-theme.widget_netdown                            = "/home/elliot/.config/awesome/themes/default/icons/net_down.png"
-theme.widget_netup                              = "/home/elliot/.config/awesome/themes/default/icons/net_up.png"
-theme.widget_batt                               = "/home/elliot/.config/awesome/themes/default/icons/bat.png"
-theme.widget_clock                              = "/home/elliot/.config/awesome/themes/default/icons/clock.png"
-theme.widget_vol                                = "/home/elliot/.config/awesome/themes/default/icons/spkr.png"
-theme.taglist_squares_sel                       = "/home/elliot/.config/awesome/themes/default/icons/square_a.png"
-theme.taglist_squares_sel                       = "/home/elliot/.config/awesome/themes/default/icons/square_a.png"
-theme.wallpaper = "~/.arch"
+theme.widget_temp                               = "/home/viet/.config/awesome/themes/default/icons/temp.png"
+theme.widget_uptime                             = "/home/viet/.config/awesome/themes/default/icons/ac.png"
+theme.widget_cpu                                = "/home/viet/.config/awesome/themes/default/icons/cpu.png"
+theme.widget_weather                            = "/home/viet/.config/awesome/themes/default/icons/dish.png"
+theme.widget_mem                                = "/home/viet/.config/awesome/themes/default/icons/mem.png"
+theme.widget_netdown                            = "/home/viet/.config/awesome/themes/default/icons/net_down.png"
+theme.widget_netup                              = "/home/viet/.config/awesome/themes/default/icons/net_up.png"
+theme.widget_batt                               = "/home/viet/.config/awesome/themes/default/icons/bat.png"
+theme.widget_clock                              = "/home/viet/.config/awesome/themes/default/icons/clock.png"
+theme.widget_vol                                = "/home/viet/.config/awesome/themes/default/icons/spkr.png"
+theme.taglist_squares_sel                       = "/home/viet/.config/awesome/themes/default/icons/square_a.png"
+theme.taglist_squares_sel                       = "/home/viet/.config/awesome/themes/default/icons/square_a.png"
+theme.wallpaper = "~/.config/awesome/wallpaper.png"
 
 -- You can use your own layout icons like this:
 --[[
@@ -139,19 +139,19 @@ theme.layout_cornersw = themes_path.."default/layouts/cornersww.png"
 theme.layout_cornerse = themes_path.."default/layouts/cornersew.png"
 --]]
 
-theme.layout_tile                               = "/home/elliot/.config/awesome/themes/default/icons/tile.png"
-theme.layout_tilegaps                           = "/home/elliot/.config/awesome/themes/default/icons/tilegaps.png"
-theme.layout_tileleft                           = "/home/elliot/.config/awesome/themes/default/icons/tileleft.png"
-theme.layout_tilebottom                         = "/home/elliot/.config/awesome/themes/default/icons/tilebottom.png"
-theme.layout_tiletop                            = "/home/elliot/.config/awesome/themes/default/icons/tiletop.png"
-theme.layout_fairv                              = "/home/elliot/.config/awesome/themes/default/icons/fairv.png"
-theme.layout_fairh                              = "/home/elliot/.config/awesome/themes/default/icons/fairh.png"
-theme.layout_spiral                             = "/home/elliot/.config/awesome/themes/default/icons/spiral.png"
-theme.layout_dwindle                            = "/home/elliot/.config/awesome/themes/default/icons/dwindle.png"
-theme.layout_max                                = "/home/elliot/.config/awesome/themes/default/icons/max.png"
-theme.layout_fullscreen                         = "/home/elliot/.config/awesome/themes/default/icons/fullscreen.png"
-theme.layout_magnifier                          = "/home/elliot/.config/awesome/themes/default/icons/magnifier.png"
-theme.layout_floating                           = "/home/elliot/.config/awesome/themes/default/icons/floating.png"
+theme.layout_tile                               = "/home/viet/.config/awesome/themes/default/icons/tile.png"
+theme.layout_tilegaps                           = "/home/viet/.config/awesome/themes/default/icons/tilegaps.png"
+theme.layout_tileleft                           = "/home/viet/.config/awesome/themes/default/icons/tileleft.png"
+theme.layout_tilebottom                         = "/home/viet/.config/awesome/themes/default/icons/tilebottom.png"
+theme.layout_tiletop                            = "/home/viet/.config/awesome/themes/default/icons/tiletop.png"
+theme.layout_fairv                              = "/home/viet/.config/awesome/themes/default/icons/fairv.png"
+theme.layout_fairh                              = "/home/viet/.config/awesome/themes/default/icons/fairh.png"
+theme.layout_spiral                             = "/home/viet/.config/awesome/themes/default/icons/spiral.png"
+theme.layout_dwindle                            = "/home/viet/.config/awesome/themes/default/icons/dwindle.png"
+theme.layout_max                                = "/home/viet/.config/awesome/themes/default/icons/max.png"
+theme.layout_fullscreen                         = "/home/viet/.config/awesome/themes/default/icons/fullscreen.png"
+theme.layout_magnifier                          = "/home/viet/.config/awesome/themes/default/icons/magnifier.png"
+theme.layout_floating                           = "/home/viet/.config/awesome/themes/default/icons/floating.png"
 
 -- Generate Awesome icon:
 --theme.awesome_icon = theme_assets.awesome_icon(
