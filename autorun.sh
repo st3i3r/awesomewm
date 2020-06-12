@@ -6,6 +6,7 @@ function run {
     $@&
   fi
 }
+
 xrdb ~/.Xdefaults
 run compton -CGb --config ~/.config/compton/compton.conf
 run mpd
