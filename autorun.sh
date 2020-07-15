@@ -8,8 +8,8 @@ function run {
 }
 
 xrdb ~/.Xdefaults
-run compton -CGb --config ~/.config/compton/compton.conf
+run xcompmgr -c &
 run mpd
 run setxkbmap -layout "us,ru" -option "grp:alt_shift_toggle"
-run udiskie -a -n
-run xautolock -detectsleep -time 10 -locker "/home/$USER/.config/awesome/lock.sh" 
+run udiskie -a -n &
+run xautolock -detectsleep -time 10 -locker "/home/$USER/.config/awesome/lock.sh" &
