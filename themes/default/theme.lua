@@ -26,10 +26,10 @@ theme.fg_urgent     = "#cccccc"
 theme.fg_minimize   = "#aaaaaa"
 
 theme.useless_gap   = dpi(5)
-theme.border_width  = dpi(0)
---theme.border_normal = "#3d86ff"
-theme.border_normal = "#AACFD1"
-theme.border_focus  = "#000000"
+theme.border_width  = dpi(3)
+-- theme.border_focus = "#3d86ff" -- blue
+theme.border_focus = "#20ab1d" -- green
+theme.border_normal  = "#AACFD1"
 --theme.border_marked = "#00ff00"
 --theme.prompt_fg  	= "#cccccc"
 --theme.prompt_bg			= "#222222"
@@ -61,7 +61,7 @@ theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
 -- notification_[width|height|margin]
 -- notification_[border_color|border_width|shape|opacity]
 theme.notification_border_color 	= "#aaaaaa"
-theme.notification_border_width		= dpi(0)
+theme.notification_border_width		= dpi(1)
 theme.notification_bg				= "#000000dd"
 theme.notification_fg				= "#cccccc"
 -- Variables set for theming the menu:
@@ -69,7 +69,7 @@ theme.notification_fg				= "#cccccc"
 -- menu_[border_color|border_width]
 theme.menu_fg_focus = "#000000"
 theme.menu_submenu_icon = "~/.config/awesome/themes/default/arrow.png"
-theme.menu_height = dpi(20)
+theme.menu_height = dpi(25)
 theme.menu_width  = dpi(150)
 
 -- You can add as many variables as

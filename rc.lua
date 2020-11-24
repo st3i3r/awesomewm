@@ -17,9 +17,7 @@ require("awful.hotkeys_popup.keys")
 local vicious = require("vicious")
 
 local os = os
-
-
-local theme                                     = {}
+local theme        = {}
 theme.font				= "Terminus Medium 14"
 local gfs = require("gears.filesystem")
 local themes_path = gfs.get_themes_dir()
@@ -55,7 +53,7 @@ end
 beautiful.init("~/.config/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvt"
+terminal = "mate-terminal"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -161,22 +159,6 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
 
--- {{{ Wibar
--- Create a textclock widget
---[[mytextclock = awful.widget.textclock('<span font=" Terminus" color="#0000ff" background="#ffffff"> %d %b %T </span>', 1)
-lain.widget.calendar({
-   attach_to = { mytextclock },
-   followtag = true,
-   cal = "/usr/bin/cal --color=always",
-   notification_preset = {
-       font = "Monospace 11",
-       fg   = "#00ff00",
-       bg   = "#000000ee"
-   }
-})
---]]
-
-
 
 
 -- Create a wibox for each screen and add it
@@ -258,7 +240,7 @@ theme.widget_music                              = "/home/viet/.config/awesome/th
 -- Textclock
 os.setlocale(os.getenv("LANG")) -- to localize the clock
 local clockicon = wibox.widget.imagebox(theme.widget_clock)
-local mytextclock = wibox.widget.textclock(markup("#7788af", "%A %d %B ") .. markup("#ab7367", ">") .. markup("#de5e1e", " %H:%M "))
+local mytextclock = wibox.widget.textclock(markup("#7788af", " %A %d %B ") .. markup("#ab7367", ">") .. markup("#de5e1e", " %H:%M "))
 mytextclock.font = theme.font
 
 -- Calendar
@@ -271,6 +253,9 @@ theme.cal = lain.widget.cal({
     }
 })
 
+local batteryarc_widget = require("custom-widgets.battery.batteryarc")
+
+
 -- Coretemp
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
 local temp = lain.widget.temp({
@@ -280,13 +265,13 @@ end
 })
 
 
---BAT
-local baticon = wibox.widget.imagebox(theme.widget_batt)
-batwidget = wibox.widget.textbox()
-vicious.register(batwidget, vicious.widgets.bat, '$1$2% ', 120, "BAT0")
+-- BAT
+-- local baticon = wibox.widget.imagebox(theme.widget_batt)
+-- batwidget = wibox.widget.textbox()
+-- vicious.register(batwidget, vicious.widgets.bat, '$1$2% ', 120, "BAT0")
 
-batwidget2 = wibox.widget.textbox()
-vicious.register(batwidget2, vicious.widgets.bat, '$1$2%', 120, "BAT1")
+-- batwidget2 = wibox.widget.textbox()
+-- vicious.register(batwidget2, vicious.widgets.bat, '$1$2%', 120, "BAT1")
 
 
 
@@ -305,68 +290,27 @@ local function lowbat_notification()
 	local f1_status = assert(io.open("/sys/class/power_supply/BAT1/status", "r"))
 	local bat1_capacity = tonumber(f1_capacity:read("*all"))
 	local bat1_status = trim(f1_status:read("*all"))
+    local info_msg_icon = "/home/viet/.config/awesome/custom-widgets/battery/spaceman.jpg"
 
-
-	local f0_capacity = assert(io.open("/sys/class/power_supply/BAT0/capacity", "r"))
-	local f0_status = assert(io.open("/sys/class/power_supply/BAT0/status", "r"))
-	local bat0_capacity = tonumber(f0_capacity:read("*all"))
-	local bat0_status = trim(f0_status:read("*all"))
-	
-	if (bat0_capacity <= 10 and bat0_status == "Discharging") then
-		naughty.notify({ title      = "Battery Warning"
-		, text       = "Battery low! " .. bat0_capacity .."%" .. " left!"
-		, fg="#ff0000"
-		, bg="#111111"
-		, border_color = "#ff0000"
-		, margin = 5 
-		, timeout    = 15
-		, position   = "top_right"
-	})
-	end
-
-	if ((bat1_capacity == 10 or bat1_capacity == 50 or bat1_capacity == 30) and (bat1_status ~= "Charging" and bat0_status ~= "Charging")) then
-		naughty.notify({ title      = "Battery Warning"
-		, text       = "External Battery " .. bat1_capacity .."%" .. " left!"
-		--, fg="#00ff00"
-		, bg="#000000"
-		, margin = 3
-		, timeout    = 120
-		, position   = "top_right"
+	if (bat1_capacity <= 20 and bat1_status == "Discharging") then
+        naughty.destroy(notification)
+		notification = naughty.notify({
+            title      = "Battery Low",
+            text       = "Battery 1: " ..  bat1_capacity .."%" .. " left!",
+            icon = info_msg_icon,
+            icon_size = 150,
+            fg="#eee9ef",
+            bg="#f06060",
+            border_color = "#ff0000",
+            timeout    = 15,
+            position   = "top_right",
 	})
 	end
 end
 
-battimer = timer({timeout = 120})
+battimer = timer({timeout = 200})
 battimer:connect_signal("timeout", lowbat_notification)
 battimer:start()
-
-
-local function bat_notification()
-	
-	local f1_capacity = assert(io.open("/sys/class/power_supply/BAT1/capacity", "r"))
-	local f1_status = assert(io.open("/sys/class/power_supply/BAT1/status", "r"))
-	local bat1_capacity = tonumber(f1_capacity:read("*all"))
-	local bat1_status = trim(f1_status:read("*all"))
-
-
-	local f0_capacity = assert(io.open("/sys/class/power_supply/BAT0/capacity", "r"))
-	local f0_status = assert(io.open("/sys/class/power_supply/BAT0/status", "r"))
-	local bat0_capacity = tonumber(f0_capacity:read("*all"))
-	local bat0_status = trim(f0_status:read("*all"))
-
-	naughty.notify({ title      = "Battery Status"
-	, text       = "External Battery: " .. bat1_capacity .."% - " .. bat1_status .. "\n" .. "Internal Battery: " .. bat0_capacity .. "% - " .. bat0_status 
-	--, fg="#00ff00"
-	, bg="#000000"
-	, margin = 3
-	, timeout    = 5
-	, position   = "top_right"
-	})
-
-end
-
-batwidget:connect_signal("mouse::enter", bat_notification)
-
 
 
 -- MPC
@@ -444,7 +388,6 @@ cpuwidget = wibox.widget.textbox()
 vicious.register(cpuwidget, vicious.widgets.cpu, '<span color="#c92100">$1% </span>', 2)
 
 
-
 -- Weather
 local weathericon = wibox.widget.imagebox(theme.widget_weather)
 theme.weather = lain.widget.weather({
@@ -509,8 +452,6 @@ end
 
 
 
-
-
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
@@ -538,7 +479,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 23 })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = 28 })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -554,22 +495,27 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             mykeyboardlayout,
             wibox.widget.systray(),
-            wibox.container.background(wibox.container.margin(wibox.widget { mpdicon, mpd_widget, layout = wibox.layout.align.horizontal }, 1, 2), "#333333"),
-            --wibox.container.background(wibox.container.margin(wibox.widget { weathericon, theme.weather.widget, layout = wibox.layout.align.horizontal }, 1, 1), "#777E76"),
-            arrow("#333333", "#111111"),
-            wibox.container.background(wibox.container.margin(wibox.widget { netdownicon, netdowninfo, layout = wibox.layout.align.horizontal }, 1, 1), "#111111"),
-            arrow("#111111", "#333333"),
-            wibox.container.background(wibox.container.margin(wibox.widget { memicon, memwidget, layout = wibox.layout.align.horizontal }, 1, 1), "#333333"),
-            arrow("#333333", "#111111"),
-            wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpuwidget, layout = wibox.layout.align.horizontal }, 1, 1), "#111111"),
-            arrow("#111111", "#333333"),
-            wibox.container.background(wibox.container.margin(wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }, 1, 3), "#333333"),
-            arrow("#333333", "#111111"),
-            wibox.container.background(wibox.container.margin(wibox.widget { volicon, volume, layout = wibox.layout.align.horizontal }, 1, 2), "#111111"),
-            arrow("#111111", "#333333"),
-	    wibox.container.background(wibox.container.margin(wibox.widget { baticon, batwidget, layout = wibox.layout.align.horizontal }, 1, 1), "#333333"),
-	    --wibox.container.background(wibox.container.margin(wibox.widget { baticon, batwidget2, layout = wibox.layout.align.horizontal }, 1, 1), "#333333"),
-	    arrow("#333333", "#000000"),
+            wibox.container.background(wibox.container.margin(wibox.widget { mpdicon, mpd_widget, layout = wibox.layout.align.horizontal }, 5, 5), "#333333"),
+            -- wibox.container.background(wibox.container.margin(wibox.widget { weathericon, theme.weather.widget, layout = wibox.layout.align.horizontal }, 1, 1), "#777E76"),
+            -- arrow("#333333", "#111111"),
+            wibox.container.background(wibox.container.margin(wibox.widget { netdownicon, netdowninfo, layout = wibox.layout.align.horizontal }, 5, 5), "#111111"),
+            -- arrow("#111111", "#333333"),
+            wibox.container.background(wibox.container.margin(wibox.widget { memicon, memwidget, layout = wibox.layout.align.horizontal }, 5, 5), "#333333"),
+            -- arrow("#333333", "#111111"),
+            wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpuwidget, layout = wibox.layout.align.horizontal }, 5, 5), "#111111"),
+            -- arrow("#111111", "#333333"),
+            wibox.container.background(wibox.container.margin(wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }, 5, 5), "#333333"),
+            -- arrow("#333333", "#111111"),
+            wibox.container.background(wibox.container.margin(wibox.widget { volicon, volume, layout = wibox.layout.align.horizontal }, 5, 5), "#111111"),
+            -- arrow("#111111", "#333333"),
+            -- wibox.container.background(wibox.container.margin(wibox.widget { baticon, batwidget, layout = wibox.layout.align.horizontal }, 1, 1), "#333333"),
+            batteryarc_widget({
+                bat = 0
+            }),
+            batteryarc_widget({
+                bat = 1
+            }),
+            -- arrow("#333333", "#000000"),
 
             mytextclock,
             s.mylayoutbox,
@@ -609,25 +555,25 @@ globalkeys = gears.table.join(
 
 
     -- By direction client focus
-    awful.key({ modkey }, "Down",
+    awful.key({ modkey }, "j",
         function()
             awful.client.focus.global_bydirection("down")
             if client.focus then client.focus:raise() end
         end,
         {description = "focus down", group = "client"}),
-    awful.key({ modkey }, "Up",
+    awful.key({ modkey }, "k",
         function()
             awful.client.focus.global_bydirection("up")
             if client.focus then client.focus:raise() end
         end,
         {description = "focus up", group = "client"}),
-    awful.key({ modkey }, "Left",
+    awful.key({ modkey }, "h",
         function()
             awful.client.focus.global_bydirection("left")
             if client.focus then client.focus:raise() end
         end,
         {description = "focus left", group = "client"}),
-    awful.key({ modkey }, "Right",
+    awful.key({ modkey }, "l",
         function()
             awful.client.focus.global_bydirection("right")
             if client.focus then client.focus:raise() end
@@ -1056,3 +1002,20 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 awful.spawn.with_shell("~/.config/awesome/autorun.sh")
+--
+-- naughty.notify {
+--     icon = "/home/viet/.config/awesome/mr-robot-quote.jpg",
+--     icon_size = 400,
+--     fg = "#20ab1d",
+--     title = "Mr Robot",
+--     text = "We’re all living in each other’s paranoia."
+-- }
+--
+naughty.notify {
+    icon = "/home/viet/.config/awesome/mr-robot-quote.jpg",
+    icon_size = 350,
+    fg = "#20ab1d",
+    title = "UNIX",
+    margin = 10,
+    text = "Where there is a shell, there is a way"
+}
