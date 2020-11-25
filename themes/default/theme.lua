@@ -117,7 +117,7 @@ theme.widget_clock                              = "/home/viet/.config/awesome/th
 theme.widget_vol                                = "/home/viet/.config/awesome/themes/default/icons/spkr.png"
 theme.taglist_squares_sel                       = "/home/viet/.config/awesome/themes/default/icons/square_a.png"
 theme.taglist_squares_sel                       = "/home/viet/.config/awesome/themes/default/icons/square_a.png"
-theme.wallpaper = "~/.config/awesome/wallpaper.png"
+theme.wallpaper = "~/.config/awesome/images/wallpaper.png"
 
 -- You can use your own layout icons like this:
 --[[

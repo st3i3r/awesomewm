@@ -9,6 +9,7 @@
 -------------------------------------------------
 
 local awful = require("awful")
+local gears = require("gears")
 local beautiful = require("beautiful")
 local naughty = require("naughty")
 local wibox = require("wibox")
@@ -19,6 +20,77 @@ local AWESOME_DIR = HOME .. "/.config/awesome"
 
 local widget = {}
 
+local function custom_notification()
+    -- Custom centered notification
+    local w = wibox {
+        bg = "#EF2929",
+        fg = "#dddddd",
+        max_widget_size = 500,
+        opacity = 0.4,
+        border_width = 4,
+        border_color = "#cbcbcb",
+        ontop = true,
+        height = 150,
+        width = 400,
+        shape = function(cr, width, height)
+            gears.shape.rectangle(cr, width, height)
+        end
+    }
+
+
+    local title = wibox.widget {
+        text = "SYSTEM WARNING ALERT !!!",
+        align = "center",
+        border_width = 3,
+        border_color = "#000000",
+        font = "Terminus Bold 18",
+        widget = wibox.widget.textbox
+    }
+
+    local content = wibox.widget {
+        text = "20% of battery remaining",
+        align = "center",
+        widget = wibox.widget.textbox
+    }
+
+    local container_widget = wibox.widget {
+        {
+            title,
+            layout = wibox.layout.flex.vertical
+        },
+        {
+            content,
+            layout = wibox.layout.fixed.vertical
+        },
+        layout = wibox.layout.ratio.vertical,
+    }
+
+    container_widget:set_ratio(1, 0.4, 0.7)
+    local notification_timer = timer({timeout = 10})
+    notification_timer:connect_signal(
+        "timeout",
+        function() 
+            w.visible = false
+        end
+    )
+
+    w:setup {
+        container_widget,
+        layout = wibox.layout.flex.vertical
+    }
+
+    w.screen = mouse.screen
+    w.visible = true
+
+    w:connect_signal("mouse::enter", function()
+        w.visible = false
+    end)
+
+    awful.placement.centered(w)
+    notification_timer:start()
+end
+
+
 local function worker(args)
 
     local args = args or {}
@@ -26,7 +98,7 @@ local function worker(args)
     local arc_thickness = args.arc_thickness or 3
     local show_current_level = args.show_current_level or true
     local show_current_status = args.show_current_status or true
-    local timeout = args.timeout or 120
+    local timeout = args.timeout or 10
     local font = "Terminus 8"
     local size = args.size or 20
 
@@ -117,6 +189,7 @@ local function worker(args)
                     -- warn every 2 mins
                     last_battery_check = os.time()
                     show_battery_warning()
+                    custom_notification()
             end
         elseif charge > 15 and charge < 40 then
             widget.colors = { medium_level_color }
@@ -148,6 +221,7 @@ local function worker(args)
 
     widget:connect_signal("mouse::enter", function()
         show_battery_status(bat_no)
+        custom_notification()
     end)
 
     widget:connect_signal("mouse::leave", function()
@@ -168,6 +242,9 @@ local function worker(args)
             fg = "#EEE9EF",
             width = 400,
         }
+
+        custom_notification()
+
     end
 
     return widget_with_margin

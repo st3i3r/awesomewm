@@ -9,7 +9,7 @@ function run {
 
 xrdb ~/.Xdefaults
 # xcompmgr &
+# run setxkbmap -layout "us,ru" -option "grp:alt_shift_toggle"
 run mpd
-run setxkbmap -layout "us,ru" -option "grp:alt_shift_toggle"
 run udiskie -a -n &
 run xautolock -detectsleep -time 30 -locker "/home/$USER/.config/awesome/lock.sh" &

@@ -18,10 +18,14 @@ local vicious = require("vicious")
 
 local os = os
 local theme        = {}
-theme.font				= "Terminus Medium 14"
 local gfs = require("gears.filesystem")
-local themes_path = gfs.get_themes_dir()
+local config_path = gfs.get_configuration_dir()
 local markup = lain.util.markup
+
+-- Custom stuffs
+local custom_buttons  = require("custom-widgets.buttons.buttons")
+
+theme.font				= "Terminus Medium 14"
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -50,7 +54,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init("~/.config/awesome/themes/default/theme.lua")
+beautiful.init(config_path .. "themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "mate-terminal"
@@ -157,7 +161,7 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- }}}
 
 -- Keyboard map indicator and switcher
-mykeyboardlayout = awful.widget.keyboardlayout()
+-- mykeyboardlayout = awful.widget.keyboardlayout()
 
 
 
@@ -218,22 +222,17 @@ local function set_wallpaper(s)
 end
 
 
-
-
-
-
-
-theme.widget_temp                               = "/home/viet/.config/awesome/themes/default/icons/temp.png"
-theme.widget_uptime                             = "/home/viet/.config/awesome/themes/default/icons/ac.png"
-theme.widget_cpu                                = "/home/viet/.config/awesome/themes/default/icons/cpu.png"
-theme.widget_weather                            = "/home/viet/.config/awesome/themes/default/icons/dish.png"
-theme.widget_mem                                = "/home/viet/.config/awesome/themes/default/icons/mem.png"
-theme.widget_netdown                            = "/home/viet/.config/awesome/themes/default/icons/net_down.png"
-theme.widget_netup                              = "/home/viet/.config/awesome/themes/default/icons/net_up.png"
-theme.widget_batt                               = "/home/viet/.config/awesome/themes/default/icons/bat.png"
-theme.widget_clock                              = "/home/viet/.config/awesome/themes/default/icons/clock.png"
-theme.widget_vol                                = "/home/viet/.config/awesome/themes/default/icons/spkr.png"
-theme.widget_music                              = "/home/viet/.config/awesome/themes/default/icons/note.png"
+theme.widget_temp                               = config_path .. "themes/default/icons/temp.png"
+theme.widget_uptime                             = config_path .. "themes/default/icons/ac.png"
+theme.widget_cpu                                = config_path .. "themes/default/icons/cpu.png"
+theme.widget_weather                            = config_path .. "themes/default/icons/dish.png"
+theme.widget_mem                                = config_path .. "themes/default/icons/mem.png"
+theme.widget_netdown                            = config_path .. "themes/default/icons/net_down.png"
+theme.widget_netup                              = config_path .. "themes/default/icons/net_up.png"
+theme.widget_batt                               = config_path .. "themes/default/icons/bat.png"
+theme.widget_clock                              = config_path .. "themes/default/icons/clock.png"
+theme.widget_vol                                = config_path .. "themes/default/icons/spkr.png"
+theme.widget_music                              = config_path .. "themes/default/icons/note.png"
 
 
 
@@ -290,7 +289,7 @@ local function lowbat_notification()
 	local f1_status = assert(io.open("/sys/class/power_supply/BAT1/status", "r"))
 	local bat1_capacity = tonumber(f1_capacity:read("*all"))
 	local bat1_status = trim(f1_status:read("*all"))
-    local info_msg_icon = "/home/viet/.config/awesome/custom-widgets/battery/spaceman.jpg"
+    local info_msg_icon = config_path .. "custom-widgets/battery/spaceman.jpg"
 
 	if (bat1_capacity <= 20 and bat1_status == "Discharging") then
         naughty.destroy(notification)
@@ -315,7 +314,7 @@ battimer:start()
 
 -- MPC
 local mpdicon = wibox.widget.imagebox(theme.widget_music)
-local mpc = require("mpc")
+local mpc = require("custom-widgets.mpc.mpc")
 local textbox = require("wibox.widget.textbox")
 local timer = require("gears.timer")
 local mpd_widget = textbox('')
@@ -493,7 +492,7 @@ awful.screen.connect_for_each_screen(function(s)
             s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            mykeyboardlayout,
+            -- mykeyboardlayout,
             wibox.widget.systray(),
             wibox.container.background(wibox.container.margin(wibox.widget { mpdicon, mpd_widget, layout = wibox.layout.align.horizontal }, 5, 5), "#333333"),
             -- wibox.container.background(wibox.container.margin(wibox.widget { weathericon, theme.weather.widget, layout = wibox.layout.align.horizontal }, 1, 1), "#777E76"),
@@ -550,9 +549,8 @@ globalkeys = gears.table.join(
 
     -- X screen locker
     awful.key({"Mod1", "Control"}, "l", function () 
-    	awful.util.spawn("/home/viet/.config/awesome/lock.sh", false) end,
+    	awful.util.spawn(config_path .. "script/lock.sh", false) end,
               {description = "lock screen", group = "hotkeys"}),
-
 
     -- By direction client focus
     awful.key({ modkey }, "j",
@@ -583,8 +581,6 @@ globalkeys = gears.table.join(
 {description = "show main menu", group = "awesome"}),
 
    
-
-
     -- Volume Keys
    awful.key({}, "XF86AudioLowerVolume", function ()
      awful.util.spawn("amixer  sset Master 3%-", false)
@@ -779,8 +775,15 @@ clientkeys = gears.table.join(
    		function (c) 
 		   awful.titlebar.toggle(c)         
    		end, 
-        {description = "Show/Hide Titlebars", group="client"})
+        {description = "Show/Hide Titlebars", group="client"}),
 
+    -- Custom buttons
+    awful.key({ modkey }, "b",
+        function()
+            custom_buttons.launch()
+        end,
+        { description = "Launch custom buttons", group = "custom" }
+    )
 )
 
 
@@ -1001,7 +1004,7 @@ client.connect_signal("property::maximized", border_adjust)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
-awful.spawn.with_shell("~/.config/awesome/autorun.sh")
+awful.spawn.with_shell(config_path .. "script/autorun.sh")
 --
 -- naughty.notify {
 --     icon = "/home/viet/.config/awesome/mr-robot-quote.jpg",
@@ -1012,7 +1015,7 @@ awful.spawn.with_shell("~/.config/awesome/autorun.sh")
 -- }
 --
 naughty.notify {
-    icon = "/home/viet/.config/awesome/mr-robot-quote.jpg",
+    icon = config_path .. "images/mr-robot-quote.jpg",
     icon_size = 350,
     fg = "#20ab1d",
     title = "UNIX",
