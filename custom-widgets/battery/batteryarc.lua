@@ -15,81 +15,9 @@ local naughty = require("naughty")
 local wibox = require("wibox")
 local watch = require("awful.widget.watch")
 
-local HOME = os.getenv("HOME")
-local AWESOME_DIR = HOME .. "/.config/awesome"
+local AWESOME_DIR = gears.filesystem.get_configuration_dir()
 
 local widget = {}
-
-local function custom_notification()
-    -- Custom centered notification
-    local w = wibox {
-        bg = "#EF2929",
-        fg = "#dddddd",
-        max_widget_size = 500,
-        opacity = 0.4,
-        border_width = 4,
-        border_color = "#cbcbcb",
-        ontop = true,
-        height = 150,
-        width = 400,
-        shape = function(cr, width, height)
-            gears.shape.rectangle(cr, width, height)
-        end
-    }
-
-
-    local title = wibox.widget {
-        text = "SYSTEM WARNING ALERT !!!",
-        align = "center",
-        border_width = 3,
-        border_color = "#000000",
-        font = "Terminus Bold 18",
-        widget = wibox.widget.textbox
-    }
-
-    local content = wibox.widget {
-        text = "20% of battery remaining",
-        align = "center",
-        widget = wibox.widget.textbox
-    }
-
-    local container_widget = wibox.widget {
-        {
-            title,
-            layout = wibox.layout.flex.vertical
-        },
-        {
-            content,
-            layout = wibox.layout.fixed.vertical
-        },
-        layout = wibox.layout.ratio.vertical,
-    }
-
-    container_widget:set_ratio(1, 0.4, 0.7)
-    local notification_timer = timer({timeout = 10})
-    notification_timer:connect_signal(
-        "timeout",
-        function() 
-            w.visible = false
-        end
-    )
-
-    w:setup {
-        container_widget,
-        layout = wibox.layout.flex.vertical
-    }
-
-    w.screen = mouse.screen
-    w.visible = true
-
-    w:connect_signal("mouse::enter", function()
-        w.visible = false
-    end)
-
-    awful.placement.centered(w)
-    notification_timer:start()
-end
-
 
 local function worker(args)
 
@@ -98,7 +26,7 @@ local function worker(args)
     local arc_thickness = args.arc_thickness or 3
     local show_current_level = args.show_current_level or true
     local show_current_status = args.show_current_status or true
-    local timeout = args.timeout or 10
+    local timeout = args.timeout or 90
     local font = "Terminus 8"
     local size = args.size or 20
 
@@ -150,7 +78,8 @@ local function worker(args)
 
     local function update_widget(widget, stdout) 
         local charge = 0
-        local status
+        local another_bat_charge = 0
+        local status, another_bat_status
         for s in stdout:gmatch("[^\r\n]+") do
             local cur_bat_no, cur_status, charge_str, time = string.match(s, '.+(%d): (%a+), (%d?%d?%d)%%,?(.*)')
             -- Only one battery
@@ -162,6 +91,9 @@ local function worker(args)
                         status = cur_status
                     end
                 end
+            else
+                another_bat_status = cur_status
+                another_bat_charge = tonumber(charge_str)
             end
         end
 
@@ -174,25 +106,28 @@ local function worker(args)
             text.text = ''
         end
 
-
+        -- Change icon text depends on status
         if status == "Charging" then
             widget.colors = { charging_color }
             text.text = '+'
         elseif status == "Discharging" then
             text.text = '-'
-        elseif charge < 15 then
+        end
+
+        -- Change color, depends on charge level and warning
+        if charge > 20 and charge < 40 then
+            widget.colors = { medium_level_color }
+        elseif charge < 20 then
             widget.colors = { low_level_color }
             if enable_warning and 
-               bat_no == 1 and 
                status ~= "Charging" and 
-               os.difftime(os.time(), last_battery_check) > 100 then
-                    -- warn every 2 mins
+               os.difftime(os.time(), last_battery_check) > timeout and 
+               another_bat_charge < 20 and 
+               another_bat_status ~= "Charging" then
+                    -- warn every timeout = 2 mins
                     last_battery_check = os.time()
                     show_battery_warning()
-                    custom_notification()
             end
-        elseif charge > 15 and charge < 40 then
-            widget.colors = { medium_level_color }
         else
             widget.colors = { main_color }
         end
@@ -200,7 +135,7 @@ local function worker(args)
 
     watch("acpi", timeout, update_widget, widget)
 
-    -- Popup
+    -- Battery status popup when hover
     local notification
     function show_battery_status()
         awful.spawn.easy_async([[bash -c 'acpi']],
@@ -221,7 +156,6 @@ local function worker(args)
 
     widget:connect_signal("mouse::enter", function()
         show_battery_status(bat_no)
-        custom_notification()
     end)
 
     widget:connect_signal("mouse::leave", function()
@@ -230,24 +164,87 @@ local function worker(args)
 
     -- Warning notifications
     function show_battery_warning()
-        naughty.notify {
-            icon = warning_msg_icon,
-            icon_size = 100,
-            text = warning_msg_text,
-            title = warning_msg_title,
-            timeout = 20,
-            hover_timeout = 0.5,
-            position = warning_msg_position,
-            bg = "#F06060",
-            fg = "#EEE9EF",
-            width = 400,
+        -- Custom centered notification
+        local content = wibox.widget {
+            text = "",
+            align = "center",
+            widget = wibox.widget.textbox
         }
 
-        custom_notification()
+        awful.spawn.easy_async([[bash -c 'acpi']],
+            function(stdout, _, _, _)
+                local filtered_stdout = ""
+                for s in stdout:gmatch("[^\r\n]+") do
+                    local cur_bat_no, cur_status, charge_str, time_str = string.match(s, ".+(%d): (%a+), (%d?%d?%d)%%?(.*)")
+                    local tmp_stdout = "Battery " .. tostring(cur_bat_no) .. ": " .. tostring(charge_str) .. "%" .. tostring(time_str)
+                    filtered_stdout = filtered_stdout .. tmp_stdout .. "\n\n"
+                end
+                content.text = filtered_stdout
 
+            end)
+
+        local w = wibox {
+            bg = "#EF2929",
+            fg = "#dddddd",
+            max_widget_size = 500,
+            opacity = 0.4,
+            border_width = 6,
+            border_color = "#cbcbcb",
+            ontop = true,
+            height = 200,
+            width = 420,
+            shape = function(cr, width, height)
+                gears.shape.rectangle(cr, width, height)
+            end
+        }
+
+
+        local title = wibox.widget {
+            text = "SYSTEM WARNING ALERT !!!",
+            align = "center",
+            font = "Terminus Bold 19",
+            widget = wibox.widget.textbox
+        }
+
+        local container_widget = wibox.widget {
+            {
+                title,
+                layout = wibox.layout.flex.vertical
+            },
+            {
+                content,
+                layout = wibox.layout.fixed.vertical
+            },
+            layout = wibox.layout.ratio.vertical,
+        }
+
+        container_widget:set_ratio(1, 0.5, 0.5)
+        local notification_timer = timer({timeout = 10})
+        notification_timer:connect_signal(
+            "timeout",
+            function() 
+                w.visible = false
+            end
+        )
+
+        w:setup {
+            container_widget,
+            layout = wibox.layout.flex.vertical
+        }
+
+        w.screen = mouse.screen
+        w.visible = true
+
+        w:connect_signal("mouse::enter", function()
+            w.visible = false
+        end)
+
+        awful.placement.centered(w, { margins = { top = -100 }} )
+        notification_timer:start()
     end
 
     return widget_with_margin
+
 end
 
 
