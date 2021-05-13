@@ -25,7 +25,7 @@ local markup = lain.util.markup
 -- Custom stuffs
 local custom_buttons  = require("custom-widgets.buttons.buttons")
 
-theme.font				= "Terminus Medium 12"
+theme.font				= "Terminus Medium 13"
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -292,7 +292,6 @@ local function update_widget()
 	text =  ""
 	end
 	mpd_widget.text = text 
-    mpd_widget.font = theme.font
 end
 
 local connection
@@ -320,7 +319,6 @@ end)
 
 volume = wibox.widget.textbox()
 volume.font = theme.font
-volume.valign = "center"
 vicious.register(volume, vicious.widgets.volume, '<span color="#bbbbbb">$1%</span>', 0.1, "Master")
 volume:connect_signal("button::press", function(_,_,_,button)
 	if (button == 4)     then awful.spawn("amixer sset Master 5%+", false)

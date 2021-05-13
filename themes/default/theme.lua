@@ -26,10 +26,10 @@ theme.fg_urgent     = "#cccccc"
 theme.fg_minimize   = "#aaaaaa"
 
 theme.useless_gap   = dpi(5)
-theme.border_width  = dpi(3)
+theme.border_width  = dpi(5)
 -- theme.border_focus = "#3d86ff" -- blue
 theme.border_focus = "#20ab1d" -- green
-theme.border_normal  = "#AACFD1"
+theme.border_normal  = "#0dabd6"
 --theme.border_marked = "#00ff00"
 --theme.prompt_fg  	= "#cccccc"
 --theme.prompt_bg			= "#222222"
@@ -117,7 +117,7 @@ theme.widget_clock                              = "/home/viet/.config/awesome/th
 theme.widget_vol                                = "/home/viet/.config/awesome/themes/default/icons/spkr.png"
 theme.taglist_squares_sel                       = "/home/viet/.config/awesome/themes/default/icons/square_a.png"
 theme.taglist_squares_sel                       = "/home/viet/.config/awesome/themes/default/icons/square_a.png"
-theme.wallpaper = "~/.config/awesome/images/wallpaper.png"
+theme.wallpaper = "~/.config/awesome/images/wallpaper.jpg"
 
 -- You can use your own layout icons like this:
 --[[

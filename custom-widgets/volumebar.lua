@@ -18,7 +18,7 @@ local request_command = 'amixer -D pulse sget Master'
 
 local bar_color = "#74aeab"
 local mute_color = "#ff0000"
-local background_color = "#3a3a3a"
+local background_color = "#ff0000"
 
 local volumebar_widget = wibox.widget {
     max_value = 1,
