@@ -243,7 +243,7 @@ theme.cal = lain.widget.cal({
     attach_to = { mytextclock },
     followtag = true,
     notification_preset = {
-        fg   = "#dddddd",
+        fg   = "#bbbbbb",
         bg   = "#000000"
     }
 })
@@ -412,7 +412,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 28 })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = 30 })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -446,7 +446,7 @@ awful.screen.connect_for_each_screen(function(s)
             wibox.container.background(wibox.container.margin(batteryarc_widget({ bat = 1 }), -3, 0), LIGHT_BG),
             -- arrow("#333333", "#000000"),
 
-            mytextclock,
+            wibox.container.background(wibox.container.margin(mytextclock, 5, 5), DARK_BG),
             s.mylayoutbox,
         },
     }
@@ -639,7 +639,7 @@ globalkeys = gears.table.join(
             naughty.destroy(brightness_notification)
     		brightness_notification = naughty.notify({ title      = "Brightness"
       		, text       =  "Brightness level: " .. math.ceil(brightness_level/15.2) .. "%"
-      		--, fg="#00ff00"
+      		, fg="#bbbbbb"
       		, bg="#000000"
       		, timeout    = 2 
     		})
@@ -653,7 +653,7 @@ globalkeys = gears.table.join(
             naughty.destroy(brightness_notification)
     		brightness_notification = naughty.notify({ title      = "Brightness", 
 			text       =  "Brightness level: " .. math.ceil(brightness_level/15.2) .. "%",
-      		--fg="#00ff00",
+      		fg="#bbbbbb",
       		bg="#000000",
       		timeout    = 2
     		})
@@ -956,5 +956,6 @@ naughty.notify {
     fg = "#20ab1d",
     title = "UNIX",
     margin = 10,
-    text = "Where there is a shell, there is a way"
+    text = "Where there is a shell, there is a way",
+    font = theme.font
 }

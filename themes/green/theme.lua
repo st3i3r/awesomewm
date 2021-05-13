@@ -14,7 +14,7 @@ local theme = {}
 theme.font          = "Terminus Medium 12"
 
 theme.bg_normal     = "#000000"
-theme.bg_focus      = "#bbbbbb" -- white
+theme.bg_focus      = "#20ab1d" -- green
 theme.bg_urgent     = "#ff0000"
 --theme.bg_minimize   = "#0000A444"
 theme.bg_minimize   = "#00527a55"
@@ -27,8 +27,9 @@ theme.fg_minimize   = "#aaaaaa"
 
 theme.useless_gap   = dpi(5)
 theme.border_width  = dpi(5)
-theme.border_normal = "#bbbbbb"
-theme.border_focus = "#0dabd6"
+-- theme.border_focus = "#3d86ff" -- blue
+theme.border_focus = "#20ab1d" -- green
+theme.border_normal = "#bbbbbb" -- white
 --theme.border_marked = "#00ff00"
 --theme.prompt_fg  	= "#cccccc"
 --theme.prompt_bg			= "#222222"
@@ -43,7 +44,7 @@ theme.border_focus = "#0dabd6"
 -- prompt_[fg|bg|fg_cursor|bg_cursor|font]
 -- hotkeys_[bg|fg|border_width|border_color|shape|opacity|modifiers_fg|label_bg|label_fg|group_margin|font|description_font]
 -- Example:
-theme.taglist_bg_focus = "#bbbbbb"
+theme.taglist_bg_focus = "#20ab1d" -- green
 
 -- Generate taglist squares:
 local taglist_square_size = dpi(4)
