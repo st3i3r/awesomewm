@@ -334,14 +334,14 @@ end)
 memicon = wibox.widget.imagebox(theme.widget_mem)
 memwidget = wibox.widget.textbox()
 memwidget.font = theme.font
-vicious.register(memwidget, vicious.widgets.mem, '<span color="#bbbbbb">$2M </span>', 2)
+vicious.register(memwidget, vicious.widgets.mem, '<span color="#bbbbbb">$2M</span>', 2)
 
 -- CPU
 
 local cpuicon = wibox.widget.imagebox(theme.widget_cpu)
 cpuwidget = wibox.widget.textbox()
 cpuwidget.font = theme.font
-vicious.register(cpuwidget, vicious.widgets.cpu, '<span color="#bbbbbb">$1% </span>', 2)
+vicious.register(cpuwidget, vicious.widgets.cpu, '<span color="#bbbbbb">$1%</span>', 2)
 
 
 -- Net
@@ -349,16 +349,16 @@ local neticon = wibox.widget.imagebox(theme.widget_net)
 local netdowninfo = wibox.widget.textbox()
 local netinfo = lain.widget.net({
     settings = function()
-        netdowninfo:set_markup(markup.fontfg(theme.font, "#bbbbbb", net_now.received .. " "))
+        netdowninfo:set_markup(markup.fontfg(theme.font, "#bbbbbb", " " .. net_now.received))
     end
 })
 
 local separators = lain.util.separators
 local my_table = awful.util.table or gears.table
 
-
 -- Separators
 local arrow = separators.arrow_left
+local space = wibox.widget.textbox(" ")
 
 function theme.powerline_rl(cr, width, height)
     local arrow_depth, offset = height/2, 0
@@ -419,7 +419,9 @@ awful.screen.connect_for_each_screen(function(s)
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
+            space,
             mylauncher,
+            space,
             s.mytaglist,
             s.mypromptbox,
         },
@@ -431,19 +433,19 @@ awful.screen.connect_for_each_screen(function(s)
             wibox.container.background(wibox.container.margin(wibox.widget { mpdicon, mpd_widget, layout = wibox.layout.align.horizontal }, 5, 5), LIGHT_BG),
             -- wibox.container.background(wibox.container.margin(wibox.widget { weathericon, theme.weather.widget, layout = wibox.layout.align.horizontal }, 1, 1), "#777E76"),
             -- arrow("#333333", "#111111"),
-            wibox.container.background(wibox.container.margin(wibox.widget { neticon, netdowninfo, layout = wibox.layout.align.horizontal }, 5, 5), DARK_BG),
+            wibox.container.background(wibox.container.margin(wibox.widget { neticon, netdowninfo, layout = wibox.layout.align.horizontal }, 10, 10), DARK_BG),
             -- arrow("#111111", "#333333"),
-            wibox.container.background(wibox.container.margin(wibox.widget { memicon, memwidget, layout = wibox.layout.align.horizontal }, 5, 5), LIGHT_BG),
+            wibox.container.background(wibox.container.margin(wibox.widget { memicon, memwidget, layout = wibox.layout.align.horizontal }, 3, 10), LIGHT_BG),
             -- arrow("#333333", "#111111"),
-            wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpuwidget, layout = wibox.layout.align.horizontal }, 5, 5), DARK_BG),
+            wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpuwidget, layout = wibox.layout.align.horizontal }, 5, 10), DARK_BG),
             -- arrow("#111111", "#333333"),
-            wibox.container.background(wibox.container.margin(wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }, 5, 5), LIGHT_BG),
+            wibox.container.background(wibox.container.margin(wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }, 3, 10), LIGHT_BG),
             -- arrow("#333333", "#111111"),
             wibox.container.background(wibox.container.margin(wibox.widget { volicon, volume, layout = wibox.layout.align.horizontal }, 5, 10), DARK_BG),
             -- arrow("#111111", "#333333"),
             -- wibox.container.background(wibox.container.margin(wibox.widget { baticon, batwidget, layout = wibox.layout.align.horizontal }, 1, 1), "#333333"),
             wibox.container.background(wibox.container.margin(batteryarc_widget({ bat = 0 }), 5, 0), LIGHT_BG),
-            wibox.container.background(wibox.container.margin(batteryarc_widget({ bat = 1 }), -3, 0), LIGHT_BG),
+            wibox.container.background(wibox.container.margin(batteryarc_widget({ bat = 1 }), -3, 5), LIGHT_BG),
             -- arrow("#333333", "#000000"),
 
             wibox.container.background(wibox.container.margin(mytextclock, 5, 5), DARK_BG),
